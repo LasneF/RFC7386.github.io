@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Patch Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #result {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Merge Patch Tool following RFC 7386</h1>
+    <label for="source">Source JSON:</label>
+    <textarea id="source">{"name": "John", "age": 30, "city": "New York"}</textarea>
+    <label for="patch">Patch JSON:</label>
+    <textarea id="patch" >{"age": null, "city": "San Francisco"}</textarea>
+    <button onclick="applyMergePatch()">Apply Merge Patch</button>
+    <label for="result">Result:</label>
+    <textarea id="result" readonly></textarea>
+    <a href="https://github.com/LasneF/RFC7386">Github repo</a><br>
+    <a href="https://www.rfc-editor.org/rfc/rfc7386">RFC 7386</a>
+
+    <script>
+        function mergePatch(target, patch) {
+            if (typeof patch === 'object' && patch !== null) {
+                if (Array.isArray(patch)) {
+                    // Replace arrays entirely
+                    return patch;
+                }
+                if (typeof target !== 'object' || target === null || Array.isArray(target)) {
+                    target = {};
+                }
+                for (const key in patch) {
+                    if (patch[key] === null) {
+                        delete target[key];
+                    } else {
+                        target[key] = mergePatch(target[key], patch[key]);
+                    }
+                }
+                return target;
+            } else {
+                return patch;
+            }
+        }
+
+        function applyMergePatch() {
+            const source = document.getElementById('source').value;
+            const patchText = document.getElementById('patch').value;
+
+            let target, patch;
+
+            try {
+                target = JSON.parse(source);
+            } catch (e) {
+                document.getElementById('result').value = `Invalid source JSON: ${e.message}`;
+                return;
+            }
+
+            try {
+                patch = JSON.parse(patchText);
+            } catch (e) {
+                document.getElementById('result').value = `Invalid Patch JSON: ${e.message}`;
+                return;
+            }
+
+            try {
+                const result = mergePatch(target, patch);  // Use target instead of source
+                document.getElementById('result').value = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('result').value = `Error during merge patch: ${e.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
