@@ -1,0 +1,15 @@
+{
+  "name": "merge-patch-tool",
+  "version": "1.0.0",
+  "description": "A tool for merging JSON objects following RFC 7386 with unit tests",
+  "main": "mergePatch.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
