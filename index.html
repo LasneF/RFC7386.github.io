@@ -35,31 +35,9 @@
     <textarea id="result" readonly></textarea>
     <a href="https://github.com/LasneF/RFC7386">Github repo</a><br>
     <a href="https://www.rfc-editor.org/rfc/rfc7386">RFC 7386</a>
-
+    <script src="mergePatch.js"></script>
     <script>
-        function mergePatch(target, patch) {
-            if (typeof patch === 'object' && patch !== null) {
-                if (Array.isArray(patch)) {
-                    // Replace arrays entirely
-                    return patch;
-                }
-                if (typeof target !== 'object' || target === null || Array.isArray(target)) {
-                    target = {};
-                }
-                for (const key in patch) {
-                    if (patch[key] === null) {
-                        delete target[key];
-                    } else {
-                        target[key] = mergePatch(target[key], patch[key]);
-                    }
-                }
-                return target;
-            } else {
-                return patch;
-            }
-        }
-
-        function applyMergePatch() {
+       function applyMergePatch() {
             const source = document.getElementById('source').value;
             const patchText = document.getElementById('patch').value;
 
