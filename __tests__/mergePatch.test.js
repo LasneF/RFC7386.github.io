@@ -3,12 +3,7 @@ const mergePatch = require('../mergePatch');
 describe('mergePatch function', () => {
   const mergePatch = require('../mergePatch');
 
-describe('mergePatch function tests', () => {
- 
-
-
-    
-    test('Merge {"a":"b"} with {"a":"c"} should result in {"a":"c"}', () => {
+   test('Merge {"a":"b"} with {"a":"c"} should result in {"a":"c"}', () => {
         const original = { "a": "b" };
         const patch = { "a": "c" };
         const expected = { "a": "c" };
